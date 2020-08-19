@@ -2,34 +2,42 @@
 
 import sys
 
+hlt = 0b00000001
+
 class CPU:
     """Main CPU class."""
 
     def __init__(self):
         """Construct a new CPU."""
-        pass
+        self.reg = [0] * 8
+        self.pc = 0  # program counter - which instruction, or which line is curently being read
+        self.fl = 0  # flag - integer, always eight bits
+        self.ram = [0] * 256  # the amount of working memory in the hardware
+        self.running = True
+        # bitwise - binary conversion equivalent
 
-    def load(self):
+    def load(self, program):
         """Load a program into memory."""
 
         address = 0
 
         # For now, we've just hardcoded a program:
 
-        program = [
-            # From print8.ls8
-            0b10000010, # LDI R0,8
-            0b00000000,
-            0b00001000,
-            0b01000111, # PRN R0
-            0b00000000,
-            0b00000001, # HLT
-        ]
+        #program = [
+        #    # From print8.ls8
+        #    0b10000010, # LDI R0,8
+        #    0b00000000,
+        #    0b00001000,
+        #    0b01000111, # PRN R0
+        #    0b00000000,
+        #    0b00000001, # HLT
+        #]
 
-        for instruction in program:
-            self.ram[address] = instruction
-            address += 1
-
+        with open(program) as file:
+            for instruction in file:
+                if instruction[0] == '0' or instruction[0] == '1':
+                    self.ram[address] = int(instruction[0:7], 2)
+                    address += 1
 
     def alu(self, op, reg_a, reg_b):
         """ALU operations."""
@@ -62,4 +70,18 @@ class CPU:
 
     def run(self):
         """Run the CPU."""
-        pass
+        while self.running == True:
+            instruction = self.ram[self.pc]
+            if instruction == hlt:
+                self.running = False
+            # elif ldi
+            # elif prn 
+
+        # add more instructions
+        # iteratively add 
+    
+    def ram_read(self, address):
+        return self.ram[address]
+
+    def ram_write(self, address, value):
+        self.ram[address] = value
