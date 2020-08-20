@@ -3,6 +3,8 @@
 import sys
 
 hlt = 0b00000001
+ldi = 0b10000010
+prn = 0b01000111
 
 class CPU:
     """Main CPU class."""
@@ -71,11 +73,28 @@ class CPU:
     def run(self):
         """Run the CPU."""
         while self.running == True:
+
             instruction = self.ram[self.pc]
+
             if instruction == hlt:
                 self.running = False
-            # elif ldi
-            # elif prn 
+
+            elif instruction == ldi:
+                # `LDI register immediate`
+                # Set the value of a register to an integer.
+                # Machine code:
+                # 10000010 00000rrr iiiiiiii
+                # 82 0r ii
+                pass
+
+            elif instruction == prn:
+                # `PRN register` pseudo-instruction
+                # Print numeric value stored in the given register.
+                # Print to the console the decimal integer value that is stored in the given register.
+                # Machine code:
+                # 01000111 00000rrr
+                # 47 0r````
+                pass
 
         # add more instructions
         # iteratively add 
